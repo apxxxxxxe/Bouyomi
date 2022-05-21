@@ -16,7 +16,7 @@ jobs:
         submodules: true
     - name: Zip output
       run: |
-        zip -r release.zip * -x \*/.git \*/.git/\* \*/.github/\*
+        zip -r release.zip * -x \*/.git \*/.git/\* \*/.github/\* main.go go.mod
     - name: Create release
       id: create_release
       uses: actions/create-release@v1.0.0
