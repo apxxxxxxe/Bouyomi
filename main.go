@@ -108,6 +108,10 @@ func main() {
 	}
 	msg := []byte(clearTags(deleteQuickSection(string(rawMsg))))
 
+	if string(msg) == "" {
+		return
+	}
+
 	msg_length := uint32(len(msg))
 	iCommand := []byte{1, 0}
 	iSpeed := []byte{255, 255}
