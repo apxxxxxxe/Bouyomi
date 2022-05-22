@@ -8,10 +8,10 @@ file,messagetxt/simplified-chinese.txtf2bfaeb9d9d4f2cf764c71fbbeff3ca2size=672
 file,messagetxt/traditional-chinese.txt3c19fa6d88957961a5e7bccc700512c3size=6710date=2012-12-21T00:00:00
 file,proxy.dll821c3e4dfceee4b83daddab891613994size=81920date=2012-12-21T00:00:00
 file,readme.txt079eb224c59e1f954fa12297642857cfsize=1768date=2012-12-21T00:00:00
-file,socket.exe978f0eb25a56647365a720b1d8597ec6size=2627072date=2012-12-21T00:00:00
+file,socket.exe04f1f66086f982bc6e6256f62d4869easize=2628096date=2012-12-21T00:00:00
 file,system/yaya_optional.dicb11c0ffd2daed464aafeea7e0095564asize=6254date=2012-12-21T00:00:00
 file,system/yaya_plugin2.dicaf502681c78aba3ab9271fc5c46616c0size=18426date=2012-12-21T00:00:00
 file,system_config.txtd926b6717d47f5aecf890a6f86c6caecsize=264date=2012-12-21T00:00:00
-file,yaya.dll702158a7d6ab3e934c2991b955545d27size=794624date=2012-12-21T00:00:00
+file,yaya.dll869982cfbbe7c985f5cb8a9c9540fdaesize=835584date=2012-12-21T00:00:00
 file,yaya.txtc3cd874c5fe8c5b412517f7a96c0cd42size=1703date=2012-12-21T00:00:00
 file,yaya_plugin_main.txt8967a19fdb7446fe2dcb6cbe6888796fsize=1134date=2012-12-21T00:00:00
