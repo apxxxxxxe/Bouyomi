@@ -26,13 +26,10 @@
 
 
 OnOtherGhostTalk {
-  _talk = reference[4]
-  _talk = RE_REPLACE(_talk, '\\_{0,2}[a-zA-Z0-9*!&](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?', "")
-  _talk = STRENCODE(_talk, 1, "base64") // ï∂éöÉRÅ[Éhïœä∑ÇµÇƒÇ®Ç≠
-  _ = FUNCTIONEX("proxy.dll", "socket.exe", _talk)
+  _ = FUNCTIONEX("proxy.dll", "socket.exe", STRENCODE(reference[4], 1, "base64"))
 }
 
 version
 {
-  'Bouyomi/1.0'
+  'Bouyomi/1.1'
 }
