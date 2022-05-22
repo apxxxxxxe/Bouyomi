@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"log"
+	"math"
 	"net"
 	"os"
 	"regexp"
@@ -16,40 +17,33 @@ func clearTags(src string) string {
 }
 
 func deleteQuickSection(src string) string {
-	var result string
-
-	min := func(x, y int) int {
-		if x > y {
-			return y
-		} else {
-			return x
+	getMinIndex := func(arr []int) int {
+		result := -1
+		min := math.MaxInt
+		for i, n := range arr {
+			if n >= 0 && min > n {
+				result = i
+				min = n
+			}
 		}
+		return result
 	}
 
 	getStartPoint := func(s string) (int, int) {
-		var (
-			result int
-			length int
-		)
-		quickStart := "\\![quicksection,true]"
-		quick := "\\_q"
-		index_true := strings.Index(s, quickStart)
-		index := strings.Index(s, quick)
+		tags := []string{"\\![quicksection,1]", "\\![quicksection,true]", "\\_q"}
 
-		if index_true != -1 && index != -1 {
-			if index < index_true {
-				result = index
-				length = len(quick)
-			} else {
-				result = index_true
-				length = len(quickStart)
-			}
-		} else if index_true == -1 && index != -1 {
-			result = index
-			length = len(quick)
-		} else if index_true != -1 && index == -1 {
-			result = index_true
-			length = len(quickStart)
+		var indexes []int
+		for _, tag := range tags {
+			indexes = append(indexes, strings.Index(s, tag))
+		}
+
+		minIndex := getMinIndex(indexes)
+
+		var result int
+		var length int
+		if minIndex != -1 {
+			result = indexes[minIndex]
+			length = len(tags[minIndex])
 		} else {
 			result = -1
 			length = 0
@@ -59,18 +53,18 @@ func deleteQuickSection(src string) string {
 	}
 
 	getEndPoint := func(s string) int {
-		var result int
-		quickEnd := "\\![quicksection,false]"
-		quick := "\\_q"
-		index_end := strings.Index(s, quickEnd)
-		index := strings.Index(s, quick)
+		tags := []string{"\\![quicksection,0]", "\\![quicksection,false]", "\\_q"}
 
-		if index_end != -1 && index != -1 {
-			result = min(index_end+len(quickEnd), index+len(quick))
-		} else if index_end == -1 && index != -1 {
-			result = index + len(quick)
-		} else if index_end != -1 && index == -1 {
-			result = index_end + len(quickEnd)
+		var indexes []int
+		for _, tag := range tags {
+			indexes = append(indexes, strings.Index(s, tag))
+		}
+
+		minIndex := getMinIndex(indexes)
+
+		var result int
+		if minIndex != -1 {
+			result = indexes[minIndex] + len(tags[minIndex])
 		} else {
 			result = -1
 		}
@@ -78,9 +72,10 @@ func deleteQuickSection(src string) string {
 		return result
 	}
 
-	isquick := false
+	var result string
+	isQuick := false
 	for {
-		if !isquick {
+		if !isQuick {
 			i, l := getStartPoint(src)
 			if i == -1 {
 				result += src
@@ -88,14 +83,14 @@ func deleteQuickSection(src string) string {
 			}
 			result += src[:i]
 			src = src[i+l:]
-			isquick = true
+			isQuick = true
 		} else {
 			i := getEndPoint(src)
 			if i == -1 {
 				break
 			}
 			src = src[i:]
-			isquick = false
+			isQuick = false
 		}
 	}
 
@@ -103,14 +98,13 @@ func deleteQuickSection(src string) string {
 }
 
 func main() {
-
 	if len(os.Args) != 2 {
-		panic(errors.New("invalid arguments"))
+		log.Printf("error: %v\n", errors.New("invalid arguments"))
 	}
 
 	rawMsg, err := base64.StdEncoding.DecodeString(os.Args[1])
 	if err != nil {
-		panic(err)
+		log.Printf("error: %v\n", err)
 	}
 	msg := []byte(clearTags(deleteQuickSection(string(rawMsg))))
 
@@ -136,7 +130,7 @@ func main() {
 
 	conn, err := net.Dial("tcp", "localhost:50001")
 	if err != nil {
-		panic(err)
+		log.Printf("error: %v\n", err)
 	}
 
 	_, err = conn.Write(sData)
