@@ -31,5 +31,5 @@ OnOtherGhostTalk {
 
 version
 {
-  'Bouyomi/1.1'
+  'Bouyomi/1.1.1'
 }
