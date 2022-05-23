@@ -10,7 +10,28 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/mitchellh/go-ps"
 )
+
+func isProcExist(name string) bool {
+	var result bool
+
+	processes, err := ps.Processes()
+
+	if err != nil {
+		os.Exit(1)
+	}
+
+	result = false
+	for _, p := range processes {
+		if p.Executable() == name {
+			result = true
+		}
+	}
+
+	return result
+}
 
 func clearTags(src string) string {
 	return regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`).ReplaceAllString(src, "")
@@ -108,7 +129,7 @@ func main() {
 	}
 	msg := []byte(clearTags(deleteQuickSection(string(rawMsg))))
 
-	if string(msg) == "" {
+	if string(msg) == "" || !isProcExist("Bouyomichan.exe") {
 		return
 	}
 
