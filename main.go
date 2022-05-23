@@ -129,7 +129,7 @@ func main() {
 	}
 	msg := []byte(clearTags(deleteQuickSection(string(rawMsg))))
 
-	if string(msg) == "" || !isProcExist("Bouyomichan.exe") {
+	if string(msg) == "" || !isProcExist("BouyomiChan.exe") {
 		return
 	}
 
