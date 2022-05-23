@@ -7,7 +7,7 @@ file,messagetxt/japanese.txtc1dee8bf729ac413cb94a374b3253868size=9497date=201
 file,messagetxt/simplified-chinese.txtf2bfaeb9d9d4f2cf764c71fbbeff3ca2size=6724date=2012-12-21T00:00:00
 file,messagetxt/traditional-chinese.txt3c19fa6d88957961a5e7bccc700512c3size=6710date=2012-12-21T00:00:00
 file,proxy.dll821c3e4dfceee4b83daddab891613994size=81920date=2012-12-21T00:00:00
-file,readme.txta4a57c61645d25bcce84e01303647dfbsize=1983date=2012-12-21T00:00:00
+file,readme.txt25106113ffa9f8a61b8d9a09c6339bd8size=1974date=2012-12-21T00:00:00
 file,socket.exeb954505ce875700e93d816eeea9b3265size=2641408date=2012-12-21T00:00:00
 file,system/yaya_optional.dicb11c0ffd2daed464aafeea7e0095564asize=6254date=2012-12-21T00:00:00
 file,system/yaya_plugin2.dicaf502681c78aba3ab9271fc5c46616c0size=18426date=2012-12-21T00:00:00
