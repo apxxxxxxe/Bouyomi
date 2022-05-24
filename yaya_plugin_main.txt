@@ -24,12 +24,13 @@
 // http://emily.shillest.net/specwiki/index.php?PLUGIN%2F2.0%2F%E4%BB%95%E6%A7%98%E6%9B%B8
 // 
 
+// buildŽžƒIƒvƒVƒ‡ƒ“‚É`-ldflags "-H windowsgui"`‚ð‚Â‚¯‚é‚±‚Æ
 
 OnOtherGhostTalk {
-  _ = FUNCTIONEX("proxy.dll", "socket.exe", STRENCODE(reference[4], 1, "base64"))
+  _ = EXECUTE(GETSETTING("coreinfo.path") + "socket.exe", STRENCODE(reference[4], 1, "base64"))
 }
 
 version
 {
-  'Bouyomi/1.1.1'
+  'Bouyomi/1.2.0'
 }
