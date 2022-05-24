@@ -118,6 +118,26 @@ func deleteQuickSection(src string) string {
 	return result
 }
 
+func establishTCP() (net.Conn, error) {
+	conn, err := net.Dial("tcp", "localhost:50001")
+	if err != nil {
+		return nil, err
+	}
+	return conn, nil
+}
+
+func writeConn(conn net.Conn, sData []byte) error {
+	_, err := conn.Write(sData)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func closeConn(conn net.Conn) {
+	_ = conn.Close()
+}
+
 func main() {
 	if len(os.Args) != 2 {
 		log.Printf("error: %v\n", errors.New("invalid arguments"))
@@ -153,16 +173,16 @@ func main() {
 	sData = append(sData, bMsgLength...)
 	sData = append(sData, msg...)
 
-	conn, err := net.Dial("tcp", "localhost:50001")
+	conn, err := establishTCP()
 	if err != nil {
 		log.Printf("error: %v\n", err)
 	}
 
-	_, err = conn.Write(sData)
+	err = writeConn(conn, sData)
 	if err != nil {
 		log.Printf("error: %v\n", err)
 		return
 	}
 
-	_ = conn.Close()
+	closeConn(conn)
 }
