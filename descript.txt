@@ -1,29 +1,31 @@
-//•¶šƒR[ƒh
-Charset,Shift_JIS
+//æ–‡å­—ã‚³ãƒ¼ãƒ‰
+Charset,UTF-8
 
-//–¼‘O
+//åå‰
 name,Bouyomi
 
-//ìÒ
-//craftmanw‚Í“ú–{Œê‚à‰ÂAcraftman‚Í‰pŒê‚Ì‚İB‚Ç‚Á‚¿‚©•Ğ•û‚Å‚àOK
+//ä½œè€…
+//craftmanwã¯æ—¥æœ¬èªã‚‚å¯ã€craftmanã¯è‹±èªã®ã¿ã€‚ã©ã£ã¡ã‹ç‰‡æ–¹ã§ã‚‚OK
 craftman,ape
 //craftmanw
 
 //PLUGIN DLL
 filename,yaya.dll
 
-//ƒIƒvƒVƒ‡ƒ“w’è-OnSecondChange‚Ì’Ê’m•p“x
-//0‚Å–³ŒøA•W€1
+//ã‚ªãƒ—ã‚·ãƒ§ãƒ³æŒ‡å®š-OnSecondChangeã®é€šçŸ¥é »åº¦
+//0ã§ç„¡åŠ¹ã€æ¨™æº–1
 secondchangeinterval,0
 
-//ƒIƒvƒVƒ‡ƒ“w’è-ƒS[ƒXƒg‚©‚ç‚Ìƒg[ƒN’Ê’m
-//0‚Å–³ŒøA•W€0
+//ã‚ªãƒ—ã‚·ãƒ§ãƒ³æŒ‡å®š-ã‚´ãƒ¼ã‚¹ãƒˆã‹ã‚‰ã®ãƒˆãƒ¼ã‚¯é€šçŸ¥
+//0ã§ç„¡åŠ¹ã€æ¨™æº–0
 otherghosttalk,before
 
-//ƒvƒ‰ƒOƒCƒ“ID
-//http://www.famkruithof.net/uuid/uuidgen ‚Æ‚©‚Å¶¬‚Å‚«‚Ü‚·
-//ˆê“x‘‚¢‚½‚ç•Ï‚¦‚È‚¢‚±‚Æ
+//ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ID
+//http://www.famkruithof.net/uuid/uuidgen ã¨ã‹ã§ç”Ÿæˆã§ãã¾ã™
+//ä¸€åº¦æ›¸ã„ãŸã‚‰å¤‰ãˆãªã„ã“ã¨
 id,652dd9a0-d836-11ec-aa63-0800200c9a66
 
-//XVURL
+//æ›´æ–°URL
 homeurl,https://raw.githubusercontent.com/apxxxxxxe/Bouyomi/main/
+
+readme.charset,UTF-8

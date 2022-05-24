@@ -1,30 +1,30 @@
-// ****�g����****
+// ****使い方****
 // 
-// �֐����̓C�x���g�����̂܂܂ł��BSHIORI/3.0�e���v���[�g�̂悤�ɁA
-// ������擾������On_�����悤�Ȃ��Ƃ͂���܂���B
+// 関数名はイベント名そのままです。SHIORI/3.0テンプレートのように、
+// 文字列取得時頭にOn_がつくようなことはありません。
 // 
-// �l��Ԃ��Ƃ��̓��e��SakuraScript�Ƃ��Ď��s���܂�
-// �ȉ��̕ϐ��ɑ������ƁA����𐧌�ł��܂��B
+// 値を返すとその内容をSakuraScriptとして実行します
+// 以下の変数に代入すると、動作を制御できます。
 //
 //   res_event , res_reference[0]...[n]
-//     �w�肵���C�x���g��Reference���Ŕ������܂��Breference�͏ȗ���
+//     指定したイベントをReferenceつきで発生します。referenceは省略可
 //
 //   res_target
-//     �X�N���v�g��C�x���g���ǂ̃S�[�X�g�ɑ��邩���w�肵�܂��B
-//     Sakura�����w�肵�Ă��������B�܂��A__SYSTEM_ALL_GHOST__�őS�N�����S�[�X�g�ɒʒm���܂��B
-//     �ȗ�����Ɓu�v���O�C�����j���[�����s�����S�[�X�g�v�ɑ���܂�
+//     スクリプトやイベントをどのゴーストに送るかを指定します。
+//     Sakura名を指定してください。また、__SYSTEM_ALL_GHOST__で全起動中ゴーストに通知します。
+//     省略すると「プラグインメニューを実行したゴースト」に送ります
 //
 //   res_marker
-//     �o���[���̃}�[�J�[(���ɏ������o��X�e�[�^�X�\��)�ɕ\�����镶�����w��ł��܂��B
+//     バルーンのマーカー(下に小さく出るステータス表示)に表示する文字を指定できます。
 //
 //   res_event_option / res_script_option
-//     ���ꂼ��AEventOption / ScriptOption�w�b�_��ݒ肵�܂��B
+//     それぞれ、EventOption / ScriptOptionヘッダを設定します。
 //
-// �ڂ����̓v���O�C���d�l�����Q�Ƃ��Ă��������B
+// 詳しくはプラグイン仕様書を参照してください。
 // http://emily.shillest.net/specwiki/index.php?PLUGIN%2F2.0%2F%E4%BB%95%E6%A7%98%E6%9B%B8
 // 
 
-// build���I�v�V������`-ldflags "-H windowsgui"`�����邱��
+// build時オプションに`-ldflags "-H windowsgui"`をつけること
 
 OnOtherGhostTalk {
   _ = EXECUTE(GETSETTING("coreinfo.path") + "socket.exe", STRENCODE(reference[4], 1, "base64"))
