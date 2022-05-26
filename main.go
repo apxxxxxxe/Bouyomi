@@ -34,11 +34,7 @@ func isProcExist(name string) bool {
 }
 
 func clearTags(src string) string {
-	// 句読点のないトークで行が連結するのを防ぐ
-	src = strings.ReplaceAll(src, "\\n", " ")
-
-	rep := regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`)
-	return rep.ReplaceAllString(src, "")
+	return regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`).ReplaceAllString(src, "")
 }
 
 func deleteQuickSection(src string) string {
