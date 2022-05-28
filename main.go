@@ -34,7 +34,7 @@ func isProcExist(name string) bool {
 }
 
 func clearTags(src string) string {
-	return regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&\-](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`).ReplaceAllString(src, "")
+	return regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&\-+](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`).ReplaceAllString(src, "")
 }
 
 func deleteQuickSection(src string) string {
