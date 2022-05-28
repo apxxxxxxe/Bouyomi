@@ -7,7 +7,8 @@ name,Bouyomi
 //作者
 //craftmanwは日本語も可、craftmanは英語のみ。どっちか片方でもOK
 craftman,ape
-//craftmanw
+craftmanw,ape
+craftmanurl,https://apxxxxxxe.github.io/ukagaka/
 
 //PLUGIN DLL
 filename,yaya.dll
