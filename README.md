@@ -1,6 +1,3 @@
-
-[![downloads](https://img.shields.io/github/downloads/apxxxxxxe/Bouyomi/total?color=blue)](https://github.com/apxxxxxxe/Bouyomi/releases)
-
 # 伺かプラグイン「Bouyomi」
 
 - SSPでのみ動作確認
@@ -27,3 +24,6 @@
 ## 注意
 インストール直後はバージョンが古い場合があります。必ずネットワーク更新を行ってください。
 本プラグインの右クリックメニューからネットワーク更新が可能です。
+
+## ダウンロード
+[![Bouyomi.nar](https://img.shields.io/github/downloads/apxxxxxxe/Bouyomi/total?color=%2367ab7b&label=Bouyomi.nar&logo=github)](https://github.com/apxxxxxxe/Bouyomi/releases/latest/download/Bouyomi.nar) 
