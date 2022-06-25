@@ -106,7 +106,10 @@ func processNoWordSentence(src string, config *Config) string {
 			s = config.NoWordPhrase
 		}
 
-		result += s + punctuations[i]
+		result += s
+		if i < len(punctuations) {
+			result += punctuations[i]
+		}
 	}
 	return result
 }
