@@ -3,16 +3,70 @@ package main
 import (
 	"encoding/base64"
 	"encoding/binary"
+	"encoding/json"
 	"errors"
+	"io/ioutil"
 	"log"
 	"math"
 	"net"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 
 	"github.com/mitchellh/go-ps"
 )
+
+type Config struct {
+	NoWordPhrase string `json:"NoWordPhrase"`
+}
+
+func initConfig(path string) (*Config, error) {
+	config := &Config{
+		NoWordPhrase: "",
+	}
+
+	fp, err := os.Create(path)
+	if err != nil {
+		return nil, err
+	}
+	defer fp.Close()
+
+	err = json.NewEncoder(fp).Encode(config)
+	if err != nil {
+		return nil, err
+	}
+
+	return config, nil
+}
+
+func loadConfig() (*Config, error) {
+	exePath, err := os.Executable()
+	if err != nil {
+		return nil, err
+	}
+
+	path := filepath.Join(filepath.Dir(exePath), "config.json")
+
+	fp, err := os.Open(path)
+	if err != nil {
+		return initConfig(path)
+	}
+	defer fp.Close()
+
+	raw, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	var config Config
+
+	if err := json.Unmarshal(raw, &config); err != nil {
+		return nil, err
+	}
+
+	return &config, nil
+}
 
 func isProcExist(name string) bool {
 	var result bool
@@ -33,8 +87,26 @@ func isProcExist(name string) bool {
 	return result
 }
 
+var tagRep = regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&\-+](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`)
+var noWordRep = regexp.MustCompile(`^[….]+$`)
+
 func clearTags(src string) string {
-	return regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&\-+](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`).ReplaceAllString(src, "")
+	return tagRep.ReplaceAllString(src, "")
+}
+
+func processNoWordSentence(src string, config *Config) string {
+	var result string
+	ary := strings.Split(src, "。")
+	for i, s := range ary {
+		if noWordRep.MatchString(s) {
+			s = config.NoWordPhrase
+		}
+		result += s
+		if i != len(ary)-1 && s != "" {
+			result += "。"
+		}
+	}
+	return result
 }
 
 func deleteQuickSection(src string) string {
@@ -140,14 +212,20 @@ func closeConn(conn net.Conn) {
 
 func main() {
 	if len(os.Args) != 2 {
-		log.Printf("error: %v\n", errors.New("invalid arguments"))
+		err := errors.New("invalid arguments")
+		log.Printf("error: %v\n", err)
+	}
+
+	config, err := loadConfig()
+	if err != nil {
+		log.Printf("error: %v\n", err)
 	}
 
 	rawMsg, err := base64.StdEncoding.DecodeString(os.Args[1])
 	if err != nil {
 		log.Printf("error: %v\n", err)
 	}
-	msg := []byte(clearTags(deleteQuickSection(string(rawMsg))))
+	msg := []byte(processNoWordSentence(clearTags(deleteQuickSection(string(rawMsg))), config))
 
 	if string(msg) == "" || !isProcExist("BouyomiChan.exe") {
 		return
@@ -181,7 +259,6 @@ func main() {
 	err = writeConn(conn, sData)
 	if err != nil {
 		log.Printf("error: %v\n", err)
-		return
 	}
 
 	closeConn(conn)
