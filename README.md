@@ -1,3 +1,4 @@
+[![md5-CI-build](https://github.com/apxxxxxxe/Bouyomi/actions/workflows/md5-CI-build.yaml/badge.svg)](https://github.com/apxxxxxxe/Bouyomi/actions/workflows/md5-CI-build.yaml)
 # 伺かプラグイン「Bouyomi」
 
 - SSPでのみ動作確認
