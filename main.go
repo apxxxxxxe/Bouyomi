@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"log"
 	"math"
 	"net"
@@ -54,14 +53,8 @@ func loadConfig() (*Config, error) {
 	}
 	defer fp.Close()
 
-	raw, err := ioutil.ReadFile(path)
-	if err != nil {
-		return nil, err
-	}
-
 	var config Config
-
-	if err := json.Unmarshal(raw, &config); err != nil {
+	if err := json.NewDecoder(fp).Decode(&config); err != nil {
 		return nil, err
 	}
 
