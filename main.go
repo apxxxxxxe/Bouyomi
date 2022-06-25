@@ -82,6 +82,7 @@ func isProcExist(name string) bool {
 
 var tagRep = regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&\-+](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`)
 var noWordRep = regexp.MustCompile(`^[….]+$`)
+var delimRep = regexp.MustCompile(`[?？。]`)
 
 func clearTags(src string) string {
 	return tagRep.ReplaceAllString(src, "")
@@ -89,15 +90,23 @@ func clearTags(src string) string {
 
 func processNoWordSentence(src string, config *Config) string {
 	var result string
-	ary := strings.Split(src, "。")
+
+	punctuations := []string{}
+	for _, p := range delimRep.FindAllStringSubmatch(src, -1) {
+		punctuations = append(punctuations, p[0])
+	}
+
+	ary := delimRep.Split(src, -1)
 	for i, s := range ary {
+		if s == "" {
+			continue
+		}
+
 		if noWordRep.MatchString(s) {
 			s = config.NoWordPhrase
 		}
-		result += s
-		if i != len(ary)-1 && s != "" {
-			result += "。"
-		}
+
+		result += s + punctuations[i]
 	}
 	return result
 }
