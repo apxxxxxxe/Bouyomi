@@ -26,11 +26,12 @@
 
 // build時オプションに`-ldflags "-H windowsgui"`をつけること
 
-OnOtherGhostTalk {
-  _ = EXECUTE(GETSETTING("coreinfo.path") + "socket.exe", STRENCODE(reference[4], 1, "base64"))
+OnOtherGhostTalk : void
+{
+  EXECUTE(GETSETTING("coreinfo.path") + "socket.exe", STRENCODE(reference[4], 1, "base64"))
 }
 
 version
 {
-  'Bouyomi/1.2.0'
+  'Bouyomi/1.2.2'
 }
