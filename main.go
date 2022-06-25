@@ -23,7 +23,7 @@ type Config struct {
 
 func initConfig(path string) (*Config, error) {
 	config := &Config{
-		NoWordPhrase: "",
+		NoWordPhrase: "んん",
 	}
 
 	fp, err := os.Create(path)
