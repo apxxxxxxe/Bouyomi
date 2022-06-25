@@ -33,5 +33,5 @@ OnOtherGhostTalk : void
 
 version
 {
-  'Bouyomi/1.2.2'
+  'Bouyomi/1.2.3'
 }
