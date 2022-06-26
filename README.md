@@ -27,4 +27,4 @@
 本プラグインの右クリックメニューからネットワーク更新が可能です。
 
 ### ダウンロード
-[![Bouyomi.nar](https://img.shields.io/github/downloads/apxxxxxxe/Bouyomi/total?color=%2367ab7b&label=Bouyomi.nar&logo=github)](https://github.com/apxxxxxxe/Bouyomi/releases/latest/download/Bouyomi.nar) 
+[![Bouyomi.nar](https://img.shields.io/github/v/release/apxxxxxxe/Bouyomi?color=%2367ab7b&label=Bouyomi.nar&logo=github)](https://github.com/apxxxxxxe/Bouyomi/releases/latest/download/Bouyomi.nar) 
