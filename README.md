@@ -1,4 +1,7 @@
-[![md5-CI-build](https://github.com/apxxxxxxe/Bouyomi/actions/workflows/md5-CI-build.yaml/badge.svg)](https://github.com/apxxxxxxe/Bouyomi/actions/workflows/md5-CI-build.yaml)
+[![Bouyomi.nar](https://img.shields.io/github/v/release/apxxxxxxe/Bouyomi?color=%2367ab7b&label=Bouyomi.nar&logo=github)](https://github.com/apxxxxxxe/Bouyomi/releases/latest/download/Bouyomi.nar) 
+[![commits](https://img.shields.io/github/commit-activity/m/apxxxxxxe/Bouyomi?color=%2367ab7b)](https://github.com/apxxxxxxe/Bouyomi/commits/main)
+[![commits](https://img.shields.io/tokei/lines/github/apxxxxxxe/Bouyomi?color=%2367ab7b)](https://github.com/apxxxxxxe/Bouyomi/commits/main)
+
 # 伺かプラグイン「Bouyomi」
 
 - SSPでのみ動作確認
