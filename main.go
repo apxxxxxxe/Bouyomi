@@ -81,8 +81,8 @@ func isProcExist(name string) bool {
 }
 
 var tagRep = regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&\-+](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`)
-var noWordRep = regexp.MustCompile(`^[….]+$`)
-var delimRep = regexp.MustCompile(`[?？。]`)
+var noWordRep = regexp.MustCompile(`^[…‥.]+$`)
+var delimRep = regexp.MustCompile(`[！!?？。]`)
 
 func clearTags(src string) string {
 	return tagRep.ReplaceAllString(src, "")
