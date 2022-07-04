@@ -1,5 +1,5 @@
 [![Bouyomi.nar](https://img.shields.io/github/v/release/apxxxxxxe/Bouyomi?color=%2367ab7b&label=Bouyomi.nar&logo=github)](https://github.com/apxxxxxxe/Bouyomi/releases/latest/download/Bouyomi.nar) 
-[![commits](https://img.shields.io/github/commit-activity/m/apxxxxxxe/Bouyomi?color=%2367ab7b)](https://github.com/apxxxxxxe/Bouyomi/commits/main)
+[![commits](https://img.shields.io/github/last-commit/apxxxxxxe/Bouyomi?color=%2367ab7b&label=%E6%9C%80%E7%B5%82%E6%9B%B4%E6%96%B0&logo=github)](https://github.com/apxxxxxxe/Bouyomi/commits/main)
 [![commits](https://img.shields.io/tokei/lines/github/apxxxxxxe/Bouyomi?color=%2367ab7b)](https://github.com/apxxxxxxe/Bouyomi/commits/main)
 
 # 伺かプラグイン「Bouyomi」
