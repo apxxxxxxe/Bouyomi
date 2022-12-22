@@ -1,0 +1,121 @@
+// ****使い方****
+// 関数名はイベント名そのままです。SHIORI/3.0テンプレートのように、
+// 文字列取得時頭にOn_がつくようなことはありません。
+// 値を返すとその内容をSakuraScriptとして実行します
+// 以下の変数に代入すると、動作を制御できます。
+//   res_event , res_reference[0]...[n]
+//     指定したイベントをReferenceつきで発生します。referenceは省略可
+//   res_target
+//     スクリプトやイベントをどのゴーストに送るかを指定します。
+//     Sakura名を指定してください。また、__SYSTEM_ALL_GHOST__で全起動中ゴーストに通知します。
+//     省略すると「プラグインメニューを実行したゴースト」に送ります
+//   res_marker
+//     バルーンのマーカー(下に小さく出るステータス表示)に表示する文字を指定できます。
+//   res_event_option / res_script_option
+//     それぞれ、EventOption / ScriptOptionヘッダを設定します。
+// 詳しくはプラグイン仕様書を参照してください。
+// http://emily.shillest.net/specwiki/index.php?PLUGIN%2F2.0%2F%E4%BB%95%E6%A7%98%E6%9B%B8
+
+// 初期化処理
+OnSystemLoad
+{
+  name = "Bouyomi"
+  settingcount = 5
+
+  FUNCTIONEX("proxy_ex.dll", "/charset", "UTF-8")
+}
+
+OnOtherGhostTalk
+{
+  Speak(reference[4], reference[0])
+}
+
+Speak
+{
+  // _argv[0]: 読み上げるセリフ
+  // _argv[1]: セリフ元ゴースト名
+
+  _voice = 0
+
+  void EXECUTE(GETSETTING("coreinfo.path")+"core.exe", "-g %(CHR(34))%(_argv[1])%(CHR(34)) -v %(GetVoiceCode(_argv[1],_voice)) %(CHR(34))%(_argv[0])%(CHR(34))")
+}
+
+OnMenuExec
+{
+  // 選択可能な声質リストを更新
+  voicelist = SPLIT(FUNCTIONEX("proxy_ex.dll", "core.exe", "-l"), CHR(1))
+
+  _res = "\_q%(reference[1])\n"
+  for _i=0; _i<settingcount; _i++ {
+    _voicename = GetVoiceName(GetVoiceCode(reference[1], _i))
+    _res += "\\%(_i): \q[%(_voicename),OnMenuShow,%(reference[1]),%(_i)]\n"
+  }
+  _res + "\n\q[✕,]"
+}
+
+OnMenuShow
+{
+  // reference[0]: 呼び出し元ゴースト名
+  // reference[1]: 設定対象スコープ
+
+  _msg = "\![set,autoscroll,disable]\_q%(reference[0])\n\\%(reference[1])側のボイスを指定してください\n(現在: %(GetVoiceName(GetVoiceCode(_reference[0],reference[1]))))\n\n"
+
+  _selection = ""
+  foreach voicelist; _line {
+    _sp = SPLIT(_line, ',')
+    _selection += "\![*]\q[%(_sp[1]),OnVoiceSelected,%(reference[0]),%(reference[1]),%(_sp[0])]\n"
+  }
+  _msg + _selection
+}
+
+GetMD5
+{
+  // _argv[0]: md5に変換したい文字列
+
+  REPLACE(FUNCTIONEX("proxy_ex.dll", "core.exe", "-hash", _argv[0]), " ", "")
+}
+
+OnVoiceSelected
+{
+  // reference[0]: 対象ゴースト名
+  // reference[1]: 設定対象スコープ
+  // reference[2]: 棒読みちゃんボイス番号
+
+  _varname = GetMD5(reference[0]+reference[1]) + ".voice"
+  LETTONAME(_varname, reference[2])
+  SAVEVAR()
+
+  "\![raiseplugin,%(name),OnMenuExec,dummy,%(reference[0])]"
+}
+
+GetVoiceName
+{
+  // _argv[0]: 棒読みちゃんボイス番号
+
+  foreach voicelist; _line {
+    _sp = SPLIT(_line, ',')
+    if _sp[0] == _argv[0] {
+      _sp[1]
+      return
+    }
+  }
+}
+
+GetVoiceCode
+{
+  // _argv[0]: 対象ゴースト名
+  // _argv[1]: 対象スコープ
+
+  _varname = GetMD5(_argv[0]+_argv[1]) + ".voice"
+  if ISVAR(_varname) {
+    EVAL(_varname)
+  }
+  else {
+    0
+  }
+}
+
+version
+{
+  "%(name)/1.2.4"
+}
