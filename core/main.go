@@ -8,22 +8,28 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"regexp"
 	"strings"
 )
 
+var repCharacter = regexp.MustCompile(`(?m)^(sakura|kero|char[0-9]+)\.name`)
+
 func main() {
 	var (
-		showList bool
-		isBase64 bool
-		getHash  bool
-		voice64  int
-		ghost    string
+		showList      bool
+		isBase64      bool
+		getHash       bool
+		getCharaCount bool
+		voice64       int
+		ghostName     string
 	)
 	flag.BoolVar(&showList, "l", false, "show available voices")
 	flag.BoolVar(&isBase64, "base64", false, "input base64 message")
 	flag.BoolVar(&getHash, "hash", false, "show hash")
+	flag.BoolVar(&getCharaCount, "count", false, "count characters")
 	flag.IntVar(&voice64, "v", 0, "voice number")
-	flag.StringVar(&ghost, "g", "", "ghost name")
+	flag.StringVar(&ghostName, "g", "", "ghost name")
 	flag.Parse()
 
 	config, err := loadConfig()
@@ -55,7 +61,22 @@ func main() {
 	}
 
 	if getHash {
+		// arg[0]: ハッシュ化したい文字列
+		// 文字列をmd5エンコードして返す
 		fmt.Printf("%x", md5.Sum([]byte(flag.Arg(0))))
+		os.Exit(0)
+	}
+
+	if getCharaCount {
+		// arg[0]: ゴーストのフルパス
+		// 指定ゴーストのdescript.txtの名前指定からキャラクター数をカウントして返す
+		path := filepath.Join(flag.Arg(0), "ghost", "master", "descript.txt")
+		b, err := os.ReadFile(path)
+		if err != nil {
+			log.Printf("error: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("%d", len(repCharacter.FindAllIndex(b, -1)))
 		os.Exit(0)
 	}
 
@@ -95,7 +116,7 @@ func main() {
 	// 各セリフを読み上げさせる
 	for _, dialog := range splitDialog(baseText) {
 		msg := processNoWordSentence(clearTags(dialog.Text), config)
-		voice := findVoice(voiceMap, ghost, dialog.Scope)
+		voice := findVoice(voiceMap, ghostName, dialog.Scope)
 		if err := speak(msg, voice); err != nil {
 			log.Printf("error: %v\n", err)
 			os.Exit(1)

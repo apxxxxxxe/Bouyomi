@@ -20,7 +20,6 @@
 OnSystemLoad
 {
   name = "Bouyomi"
-  settingcount = 5
 
   FUNCTIONEX("proxy_ex.dll", "/charset", "UTF-8")
 }
@@ -45,8 +44,11 @@ OnMenuExec
   // 選択可能な声質リストを更新
   voicelist = SPLIT(FUNCTIONEX("proxy_ex.dll", "core.exe", "-l"), CHR(1))
 
+  _path = RE_REPLACE(reference[4], "\\$", "")
+  _charactercount = FUNCTIONEX("proxy_ex.dll", "core.exe", "-count", _path)
+
   _res = "\_q%(reference[1])\n"
-  for _i=0; _i<settingcount; _i++ {
+  for _i=0; _i<_charactercount; _i++ {
     _voicename = GetVoiceName(GetVoiceCode(reference[1], _i))
     _res += "\\%(_i): \q[%(_voicename),OnMenuShow,%(reference[1]),%(_i)]\n"
   }
@@ -58,14 +60,14 @@ OnMenuShow
   // reference[0]: 呼び出し元ゴースト名
   // reference[1]: 設定対象スコープ
 
-  _msg = "\![set,autoscroll,disable]\_q%(reference[0])\n\\%(reference[1])側のボイスを指定してください\n(現在: %(GetVoiceName(GetVoiceCode(_reference[0],reference[1]))))\n\n"
+  _msg = "\![set,autoscroll,disable]\_q\b[2]%(reference[0])\n\\%(reference[1])側のボイスを指定してください\n(現在: %(GetVoiceName(GetVoiceCode(_reference[0],reference[1]))))\n\n"
 
   _selection = ""
   foreach voicelist; _line {
     _sp = SPLIT(_line, ',')
     _selection += "\![*]\q[%(_sp[1]),OnVoiceSelected,%(reference[0]),%(reference[1]),%(_sp[0])]\n"
   }
-  _msg + _selection
+  _msg + _selection + "\n\q[✕,]"
 }
 
 GetMD5
@@ -99,6 +101,8 @@ GetVoiceName
       return
     }
   }
+
+  "【ボイス番号%(_argv[0])は現在存在しません】"
 }
 
 GetVoiceCode
