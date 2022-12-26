@@ -18,12 +18,12 @@
 本プラグインは、CSaori Project様によるプラグイン「[棒読みちゃん送信](http://ssp.shillest.net/plugin/BouyomiChan.nar)」と類似した機能を持ちますが、以下の違いがあります。
 
 ### VOICEVOXやCOEIROINKと連携する
-![image](https://user-images.githubusercontent.com/39634779/209463977-936c1485-f9d1-4e83-b046-aa0013d802a9.png)
+![image](https://user-images.githubusercontent.com/39634779/209561639-5be1d970-6686-4e63-9160-c66d7d1a0dfd.png)
 
 shigobu氏による[SAPI For VOICEVOX](https://github.com/shigobu/SAPIForVOICEVOX)で設定することで、[VOICEVOX](https://voicevox.hiroshiba.jp/)や[COEIROINK](https://coeiroink.com/)などの音声合成ソフトと連携する事が可能です。
 
 ### 声質を各ゴースト、各キャラクターごとに自由に設定可能
-![image](https://user-images.githubusercontent.com/39634779/209470769-837cecb2-8ec3-43d9-bd1a-48007f2fe2c1.png)
+![image](https://user-images.githubusercontent.com/39634779/209536148-b8836a91-a0a0-4555-9970-67e9f7b2a6a1.png)
 
 ゴースト別・\0\1別にそれぞれの声質を指定できます。キャラクターが3人以上の場合にも対応しています。  
 また設定はBouyomi側に保存されるため、一度設定したものは次回起動時にも引き継がれます。
@@ -35,6 +35,9 @@ shigobu氏による[SAPI For VOICEVOX](https://github.com/shigobu/SAPIForVOICEVO
 ## 有効/無効の切り替え
 ゴーストの上で右クリック→機能→エクスプローラ→種類→プラグインの順に選択し、  
 本プラグインの右クリックメニューから有効/無効の切り替えが可能です。
+
+## 設定ファイル```config.json```について
+[こちら](https://github.com/apxxxxxxe/Bouyomi/wiki/config.json%E3%81%AB%E3%82%88%E3%82%8B%E8%A8%AD%E5%AE%9A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)をご覧ください。
 
 ## 注意
 インストール直後はバージョンが古い場合があるため、必ずネットワーク更新を行ってください。  
