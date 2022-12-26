@@ -6,14 +6,9 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"log"
 	"os"
-	"path/filepath"
-	"regexp"
 	"strings"
 )
-
-var repCharacter = regexp.MustCompile(`(?m)^(sakura|kero|char[0-9]+)\.name`)
 
 func main() {
 	var (
@@ -34,13 +29,13 @@ func main() {
 
 	config, err := loadConfig()
 	if err != nil {
-		log.Printf("error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
 
 	voices, err := listVoices(config.JapaneseOnly)
 	if err != nil {
-		log.Printf("error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -56,7 +51,7 @@ func main() {
 
 	if flag.NArg() != 1 {
 		err := errors.New("invalid arguments")
-		log.Printf("error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -70,13 +65,19 @@ func main() {
 	if getCharaCount {
 		// arg[0]: ゴーストのフルパス
 		// 指定ゴーストのdescript.txtの名前指定からキャラクター数をカウントして返す
-		path := filepath.Join(flag.Arg(0), "ghost", "master", "descript.txt")
-		b, err := os.ReadFile(path)
+
+		f, err := loadDescript(flag.Arg(0))
 		if err != nil {
-			log.Printf("error: %v\n", err)
+			fmt.Fprintf(os.Stderr, "error: %v\n", err)
 			os.Exit(1)
 		}
-		fmt.Printf("%d", len(repCharacter.FindAllIndex(b, -1)))
+
+		delim := "\u0001"
+		res := ""
+		for _, line := range f {
+			res += strings.Split(line, ",")[1] + delim
+		}
+		fmt.Printf(strings.TrimSuffix(res, delim))
 		os.Exit(0)
 	}
 
@@ -89,7 +90,7 @@ func main() {
 	}
 	if !isValidVoice {
 		err := errors.New("invalid voice number")
-		log.Printf("error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -98,7 +99,7 @@ func main() {
 		// 文字化け防止のためbase64で渡されたセリフをデコードする
 		rawMsg, err = base64.StdEncoding.DecodeString(flag.Arg(0))
 		if err != nil {
-			log.Printf("error: %v\n", err)
+			fmt.Fprintf(os.Stderr, "error: %v\n", err)
 			os.Exit(1)
 		}
 	} else {
@@ -107,7 +108,7 @@ func main() {
 
 	voiceMap, err := loadVoiceMap()
 	if err != nil {
-		log.Printf("error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -118,7 +119,7 @@ func main() {
 		msg := processNoWordSentence(clearTags(dialog.Text), config)
 		voice := findVoice(voiceMap, ghostName, dialog.Scope)
 		if err := speak(msg, voice); err != nil {
-			log.Printf("error: %v\n", err)
+			fmt.Fprintf(os.Stderr, "error: %v\n", err)
 			os.Exit(1)
 		}
 	}

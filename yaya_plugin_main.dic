@@ -44,13 +44,14 @@ OnMenuExec
   // 選択可能な声質リストを更新
   voicelist = SPLIT(FUNCTIONEX("proxy_ex.dll", "core.exe", "-l"), CHR(1))
 
+  // 対象ゴーストのキャラクターリスト(\0,\1,...)を取得
   _path = RE_REPLACE(reference[4], "\\$", "")
-  _charactercount = FUNCTIONEX("proxy_ex.dll", "core.exe", "-count", _path)
+  _characterlist = SPLIT(FUNCTIONEX("proxy_ex.dll", "core.exe", "-count", _path), CHR(1))
 
-  _res = "\_q%(reference[1])\n"
-  for _i=0; _i<_charactercount; _i++ {
+  _res = "\_q%(reference[1])\n\n"
+  for _i=0; _i<ARRAYSIZE(_characterlist); _i++ {
     _voicename = GetVoiceName(GetVoiceCode(reference[1], _i))
-    _res += "\\%(_i): \q[%(_voicename),OnMenuShow,%(reference[1]),%(_i)]\n"
+    _res += "%(_characterlist[_i]): \q[【%(_voicename)】,OnMenuShow,%(reference[1]),%(_i)]\n"
   }
   _res + "\n\q[✕,]"
 }
@@ -60,7 +61,7 @@ OnMenuShow
   // reference[0]: 呼び出し元ゴースト名
   // reference[1]: 設定対象スコープ
 
-  _msg = "\![set,autoscroll,disable]\_q\b[2]%(reference[0])\n\\%(reference[1])側のボイスを指定してください\n(現在: %(GetVoiceName(GetVoiceCode(_reference[0],reference[1]))))\n\n"
+  _msg = "\![set,autoscroll,disable]\_q\b[2]%(reference[0])\n\\%(reference[1])側のボイスを指定してください\n(現在: %(GetVoiceName(GetVoiceCode(reference[0],reference[1]))))\n\n"
 
   _selection = ""
   foreach voicelist; _line {
