@@ -1,4 +1,4 @@
-package main
+package data
 
 import (
 	"encoding/json"
@@ -31,7 +31,7 @@ func initConfig(path string) (*Config, error) {
 	return config, nil
 }
 
-func loadConfig() (*Config, error) {
+func LoadConfig() (*Config, error) {
 	exePath, err := os.Executable()
 	if err != nil {
 		return nil, err

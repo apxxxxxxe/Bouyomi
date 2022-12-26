@@ -8,38 +8,42 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/apxxxxxxe/Bouyomi/data"
+	"github.com/apxxxxxxe/Bouyomi/speak"
 )
 
 func main() {
 	var (
 		showList      bool
 		isBase64      bool
-		getHash       bool
-		getCharaCount bool
 		voice64       int
 		ghostName     string
+		getHash       string
+		getCharaCount string
 	)
 	flag.BoolVar(&showList, "l", false, "show available voices")
 	flag.BoolVar(&isBase64, "base64", false, "input base64 message")
-	flag.BoolVar(&getHash, "hash", false, "show hash")
-	flag.BoolVar(&getCharaCount, "count", false, "count characters")
 	flag.IntVar(&voice64, "v", 0, "voice number")
 	flag.StringVar(&ghostName, "g", "", "ghost name")
+	flag.StringVar(&getHash, "hash", "", "get hash")
+	flag.StringVar(&getCharaCount, "count", "", "get character names")
 	flag.Parse()
 
-	config, err := loadConfig()
+	config, err := data.LoadConfig()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
 
-	voices, err := listVoices(config.JapaneseOnly)
+	voices, err := data.ListVoices(config.JapaneseOnly)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
 
 	if showList {
+		// 利用可能な声質のリストを返す
 		delim := "\u0001"
 		p := ""
 		for _, v := range voices {
@@ -47,26 +51,13 @@ func main() {
 		}
 		fmt.Println(strings.TrimSuffix(p, delim))
 		os.Exit(0)
-	}
-
-	if flag.NArg() != 1 {
-		err := errors.New("invalid arguments")
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
-	}
-
-	if getHash {
-		// arg[0]: ハッシュ化したい文字列
+	} else if getHash != "" {
 		// 文字列をmd5エンコードして返す
-		fmt.Printf("%x", md5.Sum([]byte(flag.Arg(0))))
+		fmt.Printf("%x", md5.Sum([]byte(getHash)))
 		os.Exit(0)
-	}
-
-	if getCharaCount {
-		// arg[0]: ゴーストのフルパス
+	} else if getCharaCount != "" {
 		// 指定ゴーストのdescript.txtの名前指定からキャラクター数をカウントして返す
-
-		f, err := loadDescript(flag.Arg(0))
+		f, err := data.LoadDescript(getCharaCount)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error: %v\n", err)
 			os.Exit(1)
@@ -79,6 +70,12 @@ func main() {
 		}
 		fmt.Printf(strings.TrimSuffix(res, delim))
 		os.Exit(0)
+	}
+
+	if flag.NArg() != 1 {
+		err := errors.New("invalid arguments")
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		os.Exit(1)
 	}
 
 	voice := int16(voice64)
@@ -106,19 +103,15 @@ func main() {
 		rawMsg = []byte(flag.Arg(0))
 	}
 
-	voiceMap, err := loadVoiceMap()
+	voiceMap, err := data.LoadVoiceMap()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
 
-	baseText := deleteQuickSection(string(rawMsg))
-
 	// 各セリフを読み上げさせる
-	for _, dialog := range splitDialog(baseText) {
-		msg := processNoWordSentence(clearTags(dialog.Text), config)
-		voice := findVoice(voiceMap, ghostName, dialog.Scope)
-		if err := speak(msg, voice); err != nil {
+	for _, dialog := range speak.SplitDialog(string(rawMsg), config) {
+		if err := speak.Speak(dialog.Text, data.FindVoice(voiceMap, ghostName, dialog.Scope)); err != nil {
 			fmt.Fprintf(os.Stderr, "error: %v\n", err)
 			os.Exit(1)
 		}

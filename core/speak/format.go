@@ -1,4 +1,4 @@
-package main
+package speak
 
 import (
 	"log"
@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/apxxxxxxe/Bouyomi/data"
 )
 
 type Dialog struct {
@@ -17,6 +19,18 @@ var tagRep = regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&\-+](\d|\[("([^"]|\\")+?"|
 var noWordRep = regexp.MustCompile(`^[…‥.]+$`)
 var delimRep = regexp.MustCompile(`[！!?？。]`)
 var chScopeRep = regexp.MustCompile(`(\\([01])|\\p\[([0-9]+)\])`)
+
+func SplitDialog(src string, config *data.Config) []Dialog {
+	// クイックセクションを削除
+	src = deleteQuickSection(src)
+
+	res := splitDialog(src)
+	for i := range res {
+		res[i].Text = processNoWordSentence(clearTags(res[i].Text), config)
+	}
+
+	return res
+}
 
 // スコープ切り替えを区切りとしてテキストを分割する
 func splitDialog(text string) []Dialog {
@@ -50,7 +64,7 @@ func clearTags(src string) string {
 }
 
 // ……。など読み上げのない文を代替文に置き換える
-func processNoWordSentence(src string, config *Config) string {
+func processNoWordSentence(src string, config *data.Config) string {
 	var result string
 
 	punctuations := []string{}

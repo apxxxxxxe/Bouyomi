@@ -1,6 +1,14 @@
-package main
+package data
 
 import (
+	"crypto/md5"
+	"fmt"
+	"os"
+	"path/filepath"
+	"regexp"
+	"strconv"
+	"strings"
+
 	"golang.org/x/sys/windows/registry"
 )
 
@@ -10,7 +18,13 @@ type Voice struct {
 	Language          string
 }
 
-func listVoices(japaneseOnly bool) ([]Voice, error) {
+type VoiceMap = map[string]int16
+
+const varPath = "yaya_variable.cfg"
+
+var rep = regexp.MustCompile(`^[a-z0-9]+\.voice`)
+
+func ListVoices(japaneseOnly bool) ([]Voice, error) {
 	const tokenPath = `SOFTWARE\WOW6432Node\Microsoft\SPEECH\Voices\Tokens`
 
 	k, err := registry.OpenKey(registry.LOCAL_MACHINE, tokenPath, registry.READ)
@@ -60,4 +74,47 @@ func listVoices(japaneseOnly bool) ([]Voice, error) {
 	}
 
 	return voices, nil
+}
+
+func FindVoice(v VoiceMap, ghost string, scope int) int16 {
+	key := fmt.Sprintf("%x", md5.Sum([]byte(ghost+strconv.Itoa(scope)))) + ".voice"
+	if voice, ok := v[key]; ok {
+		return voice
+	} else {
+		return 0
+	}
+}
+
+func LoadVoiceMap() (VoiceMap, error) {
+	result := VoiceMap{}
+
+	exec, err := os.Executable()
+	if err != nil {
+		return nil, err
+	}
+
+	b, err := os.ReadFile(filepath.Join(filepath.Dir(exec), varPath))
+	if err != nil {
+		return nil, err
+	}
+
+	for _, line := range strings.Split(string(b), "\n") {
+		if !rep.Match([]byte(line)) {
+			continue
+		}
+
+		c := strings.Split(line, ",")
+		if len(c) < 2 {
+			continue
+		}
+
+		VoiceNum, err := strconv.Atoi(c[1])
+		if err != nil {
+			continue
+		}
+
+		result[c[0]] = int16(VoiceNum)
+	}
+
+	return result, nil
 }

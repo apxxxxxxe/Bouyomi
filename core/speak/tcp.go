@@ -1,4 +1,4 @@
-package main
+package speak
 
 import (
 	"bytes"
@@ -11,7 +11,7 @@ import (
 )
 
 // 棒読みちゃんに文字列を読み上げてもらう
-func speak(msg string, voice int16) error {
+func Speak(msg string, voice int16) error {
 	if msg == "" || !isProcExist("BouyomiChan.exe") {
 		return nil
 	}

@@ -1,4 +1,4 @@
-package main
+package data
 
 import (
 	"bytes"
@@ -20,7 +20,7 @@ var repNum = regexp.MustCompile(`\d+`)
 var repSjis = regexp.MustCompile(`(?i)shift_jis`)
 
 // descript.txtを読み込んでキャラクター名(\0,\1,...)を返す
-func loadDescript(ghostpath string) ([]string, error) {
+func LoadDescript(ghostpath string) ([]string, error) {
 	path := filepath.Join(ghostpath, "ghost", "master", "descript.txt")
 	b, err := os.ReadFile(path)
 	if err != nil {
