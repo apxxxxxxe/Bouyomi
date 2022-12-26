@@ -17,13 +17,8 @@ func initConfig(path string) (*Config, error) {
 		JapaneseOnly: true,
 	}
 
-	fp, err := os.Create(path)
-	if err != nil {
-		return nil, err
-	}
-	defer fp.Close()
-
-	err = json.NewEncoder(fp).Encode(config)
+	bJson, err := json.MarshalIndent(config, "", "	")
+	err = os.WriteFile(path, bJson, 0644)
 	if err != nil {
 		return nil, err
 	}
