@@ -51,24 +51,25 @@ OnMenuExec
   _res = "\_q%(reference[1])\n\n"
   for _i=0; _i<ARRAYSIZE(_characterlist); _i++ {
     _voicename = GetVoiceName(GetVoiceCode(reference[1], _i))
-    _res += "%(_characterlist[_i]): \q[【%(_voicename)】,OnMenuShow,%(reference[1]),%(_i)]\n"
+    _res += "%(_characterlist[_i]):\n  \q[【%(_voicename)】,OnMenuShow,%(reference[1]),%(_i),%(_path)]\n\n"
   }
-  _res + "\n\q[✕,]"
+  _res + "\q[✕,]"
 }
 
 OnMenuShow
 {
   // reference[0]: 呼び出し元ゴースト名
   // reference[1]: 設定対象スコープ
+  // reference[2]: 対象ゴーストのフルパス
 
   _msg = "\![set,autoscroll,disable]\_q\b[2]%(reference[0])\n\\%(reference[1])側のボイスを指定してください\n(現在: %(GetVoiceName(GetVoiceCode(reference[0],reference[1]))))\n\n"
 
   _selection = ""
   foreach voicelist; _line {
     _sp = SPLIT(_line, ',')
-    _selection += "\![*]\q[%(_sp[1]),OnVoiceSelected,%(reference[0]),%(reference[1]),%(_sp[0])]\n"
+    _selection += "\![*]\q[%(_sp[1]),OnVoiceSelected,%(reference[0]),%(reference[1]),%(_sp[0]),%(_fullpath)]\n"
   }
-  _msg + _selection + "\n\q[✕,]"
+  _msg + _selection + "\n\q[←,OnMenuExec,dummy,%(reference[0]),dummy,dummy,%(reference[2])] \q[✕,]"
 }
 
 GetMD5
@@ -83,12 +84,13 @@ OnVoiceSelected
   // reference[0]: 対象ゴースト名
   // reference[1]: 設定対象スコープ
   // reference[2]: 棒読みちゃんボイス番号
+  // reference[3]: 対象ゴーストのフルパス
 
   _varname = GetMD5(reference[0]+reference[1]) + ".voice"
   LETTONAME(_varname, reference[2])
   SAVEVAR()
 
-  "\![raiseplugin,%(name),OnMenuExec,dummy,%(reference[0])]"
+  "\![raiseplugin,%(name),OnMenuExec,dummy,%(reference[0]),dummy,dummy,%(reference[3])]"
 }
 
 GetVoiceName
