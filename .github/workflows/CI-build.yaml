@@ -15,38 +15,39 @@ jobs:
         uses: Taromati2/yaya-CI-check@v1
         with:
           shiori-path: .\yaya.dll
-  core-build:
-    runs-on: ubuntu-latest
+  build:
+    if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+    runs-on: windows-latest
+    needs: check
     steps:
-      - uses: actions/checkout@v3
+      - name: disable auto crlf
+        uses: steve02081504/disable-autocrlf@v1
+      - name: checkout
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
           go-version: 1.19
-      - name: build
+      - name: core build
         run: |
           cd core
-          GOOS=windows GOARCH=amd64 go build -ldflags "-H windowsgui" -o ../core.exe
-      - name: git-commit
+          set GOOS=windows
+          set GOARCH=amd64
+          go build -ldflags "-H windowsgui" -o ../core.exe
+          cd ..
+      - name: md5 build
+        uses: Taromati2/ukagaka-mirror-md5-CI-build@v1
+        with:
+          no-push: true
+          build-mode: other
+      - name: git push
+        # commit and push all changes at once to avoid error
         run: |
           git config --local user.email "calcium629@gmail.com"
           git config --local user.name "apxxxxxxe"
           git add .
-          git commit -m "core.exe fix" -a
+          git commit -m "CI" -a
           git pull
           git push origin $(git symbolic-ref --short HEAD)
-  md5-build:
-    if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-    runs-on: windows-latest
-    needs: [check, core-build]
-    steps:
-      - name: disable auto crlf
-        uses: steve02081504/disable-autocrlf@v1
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: updates build
-        uses: Taromati2/ukagaka-mirror-md5-CI-build@v1
-        with:
-          build-mode: other
