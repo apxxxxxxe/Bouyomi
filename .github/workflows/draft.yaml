@@ -11,10 +11,10 @@ jobs:
       uses: actions/checkout@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        submodules: true
+        submodules: false
     - name: Zip output
       run: |
-        zip -r release.zip * -x core/\*
+        zip -r release.zip * -x Bouyomi-core/\*
     - name: Create release
       id: create_release
       uses: actions/create-release@v1.0.0
