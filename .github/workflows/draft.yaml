@@ -14,7 +14,7 @@ jobs:
         submodules: false
     - name: Zip output
       run: |
-        zip -r release.zip * -x Bouyomi-core/\*
+        zip -r release.zip * -x core/\*
     - name: Create release
       id: create_release
       uses: actions/create-release@v1.0.0
