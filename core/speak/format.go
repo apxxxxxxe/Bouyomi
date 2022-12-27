@@ -20,12 +20,16 @@ var noWordRep = regexp.MustCompile(`^[…‥.]+$`)
 var delimRep = regexp.MustCompile(`[！!?？。]`)
 var chScopeRep = regexp.MustCompile(`(\\([01])|\\p\[([0-9]+)\])`)
 
+// 元の文字列を処理してからスコープごとに分割する
 func SplitDialog(src string, config *data.Config) []Dialog {
 	// クイックセクションを削除
 	src = deleteQuickSection(src)
 
+	// スコープ切り替え部で分割
 	res := splitDialog(src)
+
 	for i := range res {
+		// 各テキストを処理
 		res[i].Text = processNoWordSentence(clearTags(res[i].Text), config)
 	}
 
