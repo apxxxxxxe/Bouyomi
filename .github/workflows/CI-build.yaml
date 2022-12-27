@@ -1,11 +1,21 @@
-name: core-CI-build
+name: CI-build
 
 on:
   push:
   workflow_dispatch:
 
 jobs:
-  go-build:
+  check:
+    if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: shiori-check
+        uses: Taromati2/yaya-CI-check@v1
+        with:
+          shiori-path: .\yaya.dll
+  core-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -27,3 +37,16 @@ jobs:
           git commit -m "core.exe fix" -a
           git pull
           git push origin $(git symbolic-ref --short HEAD)
+  md5-build:
+    if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+    runs-on: windows-latest
+    needs: [check, core-build]
+    steps:
+    - name: disable auto crlf
+      uses: steve02081504/disable-autocrlf@v1
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: updates build
+      uses: Taromati2/ukagaka-mirror-md5-CI-build@v1
+      with:
+        build-mode: other
