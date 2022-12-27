@@ -1,0 +1,5 @@
+.git/,nonar,noupdate
+.github/,nonar,noupdate
+core/,nonar,noupdate
+profile/,nonar,noupdate
+yaya_variable,nonar,noupdate

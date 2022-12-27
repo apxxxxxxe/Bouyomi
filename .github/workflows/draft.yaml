@@ -1,12 +1,10 @@
-name: release-with-tag
+name: release-draft
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_dispatch:
 
 jobs:
-  release-with-tag:
+  release-draft:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -25,7 +23,7 @@ jobs:
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
-        draft: false
+        draft: true
         prerelease: false
     - name: Upload Release Asset
       id: upload-release-asset

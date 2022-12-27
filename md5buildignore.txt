@@ -27,6 +27,6 @@ XtraStuf.mac/
 
 
 yaya_variable.cfg
-go.sum
-go.mod
-main.go
+
+config.json
+core/
