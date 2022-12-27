@@ -29,4 +29,4 @@ XtraStuf.mac/
 yaya_variable.cfg
 
 config.json
-core/
+Bouyomi-core/

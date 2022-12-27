@@ -10,21 +10,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          path: main
-      - uses: actions/checkout@v3
-        with:
-          repository: apxxxxxxe/Bouyomi-core
-          path: core
+          submodules: true
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
           go-version: 1.19
       - name: build
-        working-directory: core
         run: |
-          GOOS=windows GOARCH=amd64 go build -ldflags "-H windowsgui" -o ../main/core.exe
+          cd Bouyomi-core
+          GOOS=windows GOARCH=amd64 go build -ldflags "-H windowsgui" -o ../core.exe
       - name: git-commit
-        working-directory: main
         run: |
           git config --local user.email "calcium629@gmail.com"
           git config --local user.name "apxxxxxxe"
