@@ -6,8 +6,8 @@ name,Bouyomi
 
 //作者
 //craftmanwは日本語も可、craftmanは英語のみ。どっちか片方でもOK
-craftman,ape
-craftmanw,ape
+craftman,HinoTsumi
+craftmanw,日野つみ
 craftmanurl,https://apxxxxxxe.github.io/ukagaka/
 
 //PLUGIN DLL
