@@ -19,9 +19,9 @@
 // 初期化処理
 OnSystemLoad
 {
-  name = "Bouyomi"
+  name = 'Bouyomi'
 
-  FUNCTIONEX("proxy_ex.dll", "/charset", "UTF-8")
+  FUNCTIONEX('proxy_ex.dll', '/charset', 'UTF-8')
 
   // 更新をかける
   '\![updateother,--plugin=%(name)]'
@@ -39,24 +39,24 @@ Speak
 
   _voice = 0
 
-  void EXECUTE(GETSETTING("coreinfo.path")+"core.exe", "-g %(CHR(34))%(_argv[1])%(CHR(34)) -v %(GetVoiceCode(_argv[1],_voice)) %(CHR(34))%(_argv[0])%(CHR(34))")
+  void EXECUTE(GETSETTING('coreinfo.path')+'core.exe', "-g %(CHR(34))%(_argv[1])%(CHR(34)) -v %(GetVoiceCode(_argv[1],_voice)) %(CHR(34))%(_argv[0])%(CHR(34))")
 }
 
 OnMenuExec
 {
   // 選択可能な声質リストを更新
-  voicelist = SPLIT(FUNCTIONEX("proxy_ex.dll", "core.exe", "-l"), CHR(1))
+  voicelist = SPLIT(FUNCTIONEX('proxy_ex.dll', 'core.exe', '-l'), CHR(1))
 
   // 対象ゴーストのキャラクターリスト(\0,\1,...)を取得
-  _path = RE_REPLACE(reference[4], "\\$", "")
-  _characterlist = SPLIT(FUNCTIONEX("proxy_ex.dll", "core.exe", "-count", _path), CHR(1))
+  _path = RE_REPLACE(reference[4], '\\$', '')
+  _characterlist = SPLIT(FUNCTIONEX('proxy_ex.dll', 'core.exe', '-count', _path), CHR(1))
 
-  _res = "\_q%(reference[1])\n\n"
+  _res = "\_q\0\b[2]%(reference[1])\n\n"
   for _i=0; _i<ARRAYSIZE(_characterlist); _i++ {
     _voicename = GetVoiceName(GetVoiceCode(reference[1], _i))
     _res += "%(_characterlist[_i]):\n  \q[【%(_voicename)】,OnMenuShow,%(reference[1]),%(_i),%(_path)]\n\n"
   }
-  _res + "\q[✕,]"
+  _res + "\q[✕,]\n\f[align,right]\f[height,10](%(version))\_l[0,0]"
 }
 
 OnMenuShow
@@ -65,9 +65,9 @@ OnMenuShow
   // reference[1]: 設定対象スコープ
   // reference[2]: 対象ゴーストのフルパス
 
-  _msg = "\![set,autoscroll,disable]\_q\b[2]%(reference[0])\n\\%(reference[1])側のボイスを指定してください\n(現在: %(GetVoiceName(GetVoiceCode(reference[0],reference[1]))))\n\n"
+  _msg = "\![set,autoscroll,disable]\_q\0\b[2]%(reference[0])\n\\%(reference[1])側のボイスを指定してください\n(現在: %(GetVoiceName(GetVoiceCode(reference[0],reference[1]))))\n\n"
 
-  _selection = ""
+  _selection = ''
   foreach voicelist; _line {
     _sp = SPLIT(_line, ',')
     _selection += "\![*]\q[%(_sp[1]),OnVoiceSelected,%(reference[0]),%(reference[1]),%(_sp[0]),%(_fullpath)]\n"
@@ -79,7 +79,7 @@ GetMD5
 {
   // _argv[0]: md5に変換したい文字列
 
-  REPLACE(FUNCTIONEX("proxy_ex.dll", "core.exe", "-hash", _argv[0]), " ", "")
+  REPLACE(FUNCTIONEX('proxy_ex.dll', 'core.exe', '-hash', _argv[0]), ' ', '')
 }
 
 OnVoiceSelected
@@ -89,7 +89,7 @@ OnVoiceSelected
   // reference[2]: 棒読みちゃんボイス番号
   // reference[3]: 対象ゴーストのフルパス
 
-  _varname = GetMD5(reference[0]+reference[1]) + ".voice"
+  _varname = GetMD5(reference[0]+reference[1]) + '.voice'
   LETTONAME(_varname, reference[2])
   SAVEVAR()
 
@@ -116,7 +116,7 @@ GetVoiceCode
   // _argv[0]: 対象ゴースト名
   // _argv[1]: 対象スコープ
 
-  _varname = GetMD5(_argv[0]+_argv[1]) + ".voice"
+  _varname = GetMD5(_argv[0]+_argv[1]) + '.voice'
   if ISVAR(_varname) {
     EVAL(_varname)
   }
@@ -127,5 +127,5 @@ GetVoiceCode
 
 version
 {
-  "%(name)/1.3.1"
+  "%(name)/1.3.2"
 }
