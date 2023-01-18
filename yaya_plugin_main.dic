@@ -23,8 +23,15 @@ OnSystemLoad
 
   FUNCTIONEX('proxy_ex.dll', '/charset', 'UTF-8')
 
-  // 更新をかける
-  '\![updateother,--plugin=%(name)]'
+	updateOnLoad = 0
+}
+
+OnSecondChange {
+  // 起動したら１回だけ更新をかける
+	if updateOnLoad == 0 {
+	updateOnLoad = 1
+		"\![updateother,--plugin=%(name)]"
+	}
 }
 
 OnOtherGhostTalk
@@ -127,5 +134,5 @@ GetVoiceCode
 
 version
 {
-  "%(name)/1.3.2"
+  "%(name)/1.3.3"
 }

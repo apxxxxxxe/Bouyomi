@@ -34,7 +34,7 @@ dic, yaya_plugin_main.dic
 //------------------------------------------------------------------------------
 // log, ayame.log	
 iolog, off
-ignoreiolog, ID: OnSecondChange //OnSecondChange無視
+// ignoreiolog, ID: OnSecondChange //OnSecondChange無視
 
 //------------------------------------------------------------------------------
 //セーブファイル暗号化
