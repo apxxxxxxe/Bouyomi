@@ -30,7 +30,7 @@ OnSecondChange {
   // 起動したら１回だけ更新をかける
 	if updateOnLoad == 0 {
 	updateOnLoad = 1
-		"\![updateother,--plugin=%(name)]"
+		"\C\![updateother,--plugin=%(name)]"
 	}
 }
 
@@ -134,5 +134,5 @@ GetVoiceCode
 
 version
 {
-  "%(name)/1.3.3"
+  "%(name)/1.3.4"
 }
