@@ -1,5 +1,5 @@
 charset,UTF-8
-file,core.exee6456376fa2b33c0f485294a732bb855size=4166144date=2012-12-21T00:00:00
+file,core.exe0b8a5769bd580eab15b126d975c14077size=4166144date=2012-12-21T00:00:00
 file,delete.txt38e4f0beef3d0a55856835e15f8c2acbsize=11date=2012-12-21T00:00:00
 file,descript.txt395b504669ab7671030937ca01ff7b84size=784date=2012-12-21T00:00:00
 file,install.txtedbe04c322741e55fbcc6304aee7d03esize=61date=2012-12-21T00:00:00
@@ -10,4 +10,4 @@ file,system/yaya_plugin2.dicaf502681c78aba3ab9271fc5c46616c0size=18426date=20
 file,system_config.txtd926b6717d47f5aecf890a6f86c6caecsize=264date=2012-12-21T00:00:00
 file,yaya.dll8a0a0c196b76a4a1f12a6e44499351eesize=880640date=2012-12-21T00:00:00
 file,yaya.txt1d12de2ba51386f750f20881b9c23c1fsize=1853date=2012-12-21T00:00:00
-file,yaya_plugin_main.dic2ec14bb368a4d2647578b0b7b122f20csize=4199date=2012-12-21T00:00:00
+file,yaya_plugin_main.dic334bcb27588aedfb1fd07cd7cb5de05dsize=4199date=2012-12-21T00:00:00
