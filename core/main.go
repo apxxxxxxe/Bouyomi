@@ -36,7 +36,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	voices, err := data.ListVoices(config.JapaneseOnly)
+	voices, err := data.ListVoices(*config.JapaneseOnly)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)

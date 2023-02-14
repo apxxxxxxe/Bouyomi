@@ -6,18 +6,27 @@ import (
 	"path/filepath"
 )
 
+var (
+	noWordPhrase = "んん"
+	japaneseOnly = true
+)
+
 type Config struct {
-	NoWordPhrase string `json:"NoWordPhrase"`
-	JapaneseOnly bool   `json:"JapaneseOnly"`
+	NoWordPhrase *string `json:"NoWordPhrase,omitempty"`
+	JapaneseOnly *bool   `json:"JapaneseOnly,omitempty"`
 }
 
 func initConfig(path string) (*Config, error) {
 	config := &Config{
-		NoWordPhrase: "んん",
-		JapaneseOnly: true,
+		NoWordPhrase: &noWordPhrase,
+		JapaneseOnly: &japaneseOnly,
 	}
 
 	bJson, err := json.MarshalIndent(config, "", "	")
+	if err != nil {
+		return nil, err
+	}
+
 	err = os.WriteFile(path, bJson, 0644)
 	if err != nil {
 		return nil, err
@@ -43,6 +52,30 @@ func LoadConfig() (*Config, error) {
 	var config Config
 	if err := json.NewDecoder(fp).Decode(&config); err != nil {
 		return nil, err
+	}
+
+	isReset := false
+
+	if config.NoWordPhrase == nil {
+		config.NoWordPhrase = &noWordPhrase
+		isReset = true
+	}
+
+	if config.JapaneseOnly == nil {
+		config.JapaneseOnly = &japaneseOnly
+		isReset = true
+	}
+
+	if isReset {
+		bJson, err := json.MarshalIndent(config, "", "	")
+		if err != nil {
+			return nil, err
+		}
+
+		err = os.WriteFile(path, bJson, 0644)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &config, nil

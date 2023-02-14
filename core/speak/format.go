@@ -90,7 +90,7 @@ func processNoWordSentence(src string, config *data.Config) string {
 		}
 
 		if noWordRep.MatchString(s) {
-			s = config.NoWordPhrase
+			s = *config.NoWordPhrase
 		}
 
 		result += s
