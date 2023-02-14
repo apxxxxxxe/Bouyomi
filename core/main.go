@@ -6,7 +6,9 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/apxxxxxxe/Bouyomi/data"
@@ -30,16 +32,26 @@ func main() {
 	flag.StringVar(&getCharaCount, "count", "", "get character names")
 	flag.Parse()
 
+	exePath, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	logFile, err := os.OpenFile(filepath.Join(filepath.Dir(exePath), "bouyomi.log"), os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	if err != nil {
+		panic(err)
+	}
+	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
+	log.SetOutput(logFile)
+	defer logFile.Close()
+
 	config, err := data.LoadConfig()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("error: %v\n", err)
 	}
 
 	voices, err := data.ListVoices(*config.JapaneseOnly)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("error: %v\n", err)
 	}
 
 	if showList {
@@ -59,8 +71,7 @@ func main() {
 		// 指定ゴーストのdescript.txtの名前指定からキャラクター数をカウントして返す
 		f, err := data.LoadDescript(getCharaCount)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "error: %v\n", err)
-			os.Exit(1)
+			log.Fatalf("error: %v\n", err)
 		}
 
 		delim := "\u0001"
@@ -68,14 +79,13 @@ func main() {
 		for _, line := range f {
 			res += strings.Split(line, ",")[1] + delim
 		}
-		fmt.Printf(strings.TrimSuffix(res, delim))
+		fmt.Print(strings.TrimSuffix(res, delim))
 		os.Exit(0)
 	}
 
 	if flag.NArg() != 1 {
 		err := errors.New("invalid arguments")
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("error: %v\n", err)
 	}
 
 	voice := int16(voice64)
@@ -87,8 +97,7 @@ func main() {
 	}
 	if !isValidVoice {
 		err := errors.New("invalid voice number")
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("error: %v\n", err)
 	}
 
 	var rawMsg []byte
@@ -96,8 +105,7 @@ func main() {
 		// 文字化け防止のためbase64で渡されたセリフをデコードする
 		rawMsg, err = base64.StdEncoding.DecodeString(flag.Arg(0))
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "error: %v\n", err)
-			os.Exit(1)
+			log.Fatalf("error: %v\n", err)
 		}
 	} else {
 		rawMsg = []byte(flag.Arg(0))
@@ -105,15 +113,13 @@ func main() {
 
 	voiceMap, err := data.LoadVoiceMap()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("error: %v\n", err)
 	}
 
 	// 各セリフを読み上げさせる
 	for _, dialog := range speak.SplitDialog(string(rawMsg), config) {
 		if err := speak.Speak(dialog.Text, data.FindVoice(voiceMap, ghostName, dialog.Scope)); err != nil {
-			fmt.Fprintf(os.Stderr, "error: %v\n", err)
-			os.Exit(1)
+			log.Fatalf("error: %v\n", err)
 		}
 	}
 
