@@ -47,7 +47,7 @@ func ListVoices(japaneseOnly bool) ([]Voice, error) {
 		{5, "中性", "411"},
 		{6, "ロボット", "411"},
 		{7, "機械1", "411"},
-		{8, "機械1", "411"},
+		{8, "機械2", "411"},
 	}
 	idx := int16(10001)
 	for _, s := range sub {
