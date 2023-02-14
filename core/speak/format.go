@@ -18,7 +18,7 @@ type Dialog struct {
 var tagRep = regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&\-+](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`)
 var noWordRep = regexp.MustCompile(`^[…‥.]+$`)
 var delimRep = regexp.MustCompile(`[！!?？。]`)
-var chScopeRep = regexp.MustCompile(`(\\([01])|\\p\[([0-9]+)\])`)
+var chScopeRep = regexp.MustCompile(`(\\([0h1u])|\\p\[([0-9]+)\])`)
 
 // 元の文字列を処理してからスコープごとに分割する
 func SplitDialog(src string, config *data.Config) []Dialog {
@@ -52,8 +52,15 @@ func splitDialog(text string) []Dialog {
 
 		scope, err := strconv.Atoi(sub[2] + sub[3])
 		if err != nil {
-			log.Println("abnormal index:", sub)
-			continue
+			switch sub[2] {
+			case "h":
+				scope = 0
+			case "u":
+				scope = 1
+			default:
+				log.Println("abnormal index:", sub)
+				continue
+			}
 		}
 
 		result = append(result, Dialog{scope, sep[i+1]})

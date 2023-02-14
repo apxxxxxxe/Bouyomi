@@ -134,5 +134,5 @@ GetVoiceCode
 
 version
 {
-  "%(name)/1.3.4"
+  "%(name)/1.3.5"
 }
