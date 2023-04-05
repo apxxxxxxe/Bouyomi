@@ -40,11 +40,17 @@ func SplitDialog(src string, config *data.Config) []Dialog {
 func splitDialog(text string) []Dialog {
 	result := []Dialog{}
 
+	if text == "" {
+		return result
+	} else {
+		// 文頭のセリフは\0,\hによる指定がなくても\0
+		// 後の処理を共通化するためつけておく
+		text = "\\0" + text
+	}
+
 	submch := chScopeRep.FindAllStringSubmatch(text, -1)
 	sep := chScopeRep.Split(text, -1)
-	for i := range submch {
-		sub := submch[i]
-
+	for i, sub := range submch {
 		if len(sub) != 4 {
 			log.Println("abnormal submatch:", sub)
 			continue
@@ -63,7 +69,9 @@ func splitDialog(text string) []Dialog {
 			}
 		}
 
-		result = append(result, Dialog{scope, sep[i+1]})
+		if d := sep[i+1]; d != "" {
+			result = append(result, Dialog{scope, d})
+		}
 	}
 
 	return result
