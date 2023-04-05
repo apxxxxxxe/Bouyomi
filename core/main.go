@@ -2,7 +2,6 @@ package main
 
 import (
 	"crypto/md5"
-	"encoding/base64"
 	"errors"
 	"flag"
 	"fmt"
@@ -18,14 +17,12 @@ import (
 func main() {
 	var (
 		showList      bool
-		isBase64      bool
 		voice64       int
 		ghostName     string
 		getHash       string
 		getCharaCount string
 	)
 	flag.BoolVar(&showList, "l", false, "show available voices")
-	flag.BoolVar(&isBase64, "base64", false, "input base64 message")
 	flag.IntVar(&voice64, "v", 0, "voice number")
 	flag.StringVar(&ghostName, "g", "", "ghost name")
 	flag.StringVar(&getHash, "hash", "", "get hash")
@@ -101,15 +98,7 @@ func main() {
 	}
 
 	var rawMsg []byte
-	if isBase64 {
-		// 文字化け防止のためbase64で渡されたセリフをデコードする
-		rawMsg, err = base64.StdEncoding.DecodeString(flag.Arg(0))
-		if err != nil {
-			log.Fatalf("error: %v\n", err)
-		}
-	} else {
 		rawMsg = []byte(flag.Arg(0))
-	}
 
 	voiceMap, err := data.LoadVoiceMap()
 	if err != nil {
