@@ -5,14 +5,13 @@ import (
 	"encoding/binary"
 	"fmt"
 	"net"
-	"os"
 
-	"github.com/mitchellh/go-ps"
+	"github.com/apxxxxxxe/Bouyomi/data"
 )
 
 // 棒読みちゃんに文字列を読み上げてもらう
 func Speak(msg string, voice int16) error {
-	if msg == "" || !isProcExist("BouyomiChan.exe") {
+	if msg == "" || !data.IsProcExist("BouyomiChan.exe") {
 		return nil
 	}
 
@@ -68,22 +67,3 @@ func dec2hex(d int16) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// プロセスの存在を返す
-func isProcExist(name string) bool {
-	var result bool
-
-	processes, err := ps.Processes()
-
-	if err != nil {
-		os.Exit(1)
-	}
-
-	result = false
-	for _, p := range processes {
-		if p.Executable() == name {
-			result = true
-		}
-	}
-
-	return result
-}

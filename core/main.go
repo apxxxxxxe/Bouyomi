@@ -14,20 +14,33 @@ import (
 	"github.com/apxxxxxxe/Bouyomi/speak"
 )
 
+const defaultBouyomiPath = "null"
+
 func main() {
 	var (
-		showList      bool
-		voice64       int
-		ghostName     string
-		getHash       string
-		getCharaCount string
+		bouyomiChanPath string
+		showList        bool
+		voice64         int
+		ghostName       string
+		getHash         string
+		getCharaCount   string
 	)
+	flag.StringVar(&bouyomiChanPath, "b", defaultBouyomiPath, "path to BouyomiChan.exe")
 	flag.BoolVar(&showList, "l", false, "show available voices")
 	flag.IntVar(&voice64, "v", 0, "voice number")
 	flag.StringVar(&ghostName, "g", "", "ghost name")
 	flag.StringVar(&getHash, "hash", "", "get hash")
 	flag.StringVar(&getCharaCount, "count", "", "get character names")
 	flag.Parse()
+
+	if bouyomiChanPath != defaultBouyomiPath {
+		if _, info := os.Stat(bouyomiChanPath); !os.IsNotExist(info) && !data.IsProcExist("BouyomiChan.exe") {
+			if err := data.ExecCommand(bouyomiChanPath); err != nil {
+				panic(err)
+			}
+		}
+		os.Exit(0)
+	}
 
 	exePath, err := os.Executable()
 	if err != nil {
@@ -98,7 +111,7 @@ func main() {
 	}
 
 	var rawMsg []byte
-		rawMsg = []byte(flag.Arg(0))
+	rawMsg = []byte(flag.Arg(0))
 
 	voiceMap, err := data.LoadVoiceMap()
 	if err != nil {
