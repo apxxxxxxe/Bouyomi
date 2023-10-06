@@ -7,13 +7,11 @@ import (
 )
 
 var (
-	noWordPhrase = "んん"
 	japaneseOnly = true
 	nullPath     = ""
 )
 
 type Config struct {
-	NoWordPhrase    *string `json:"NoWordPhrase,omitempty"`
 	JapaneseOnly    *bool   `json:"JapaneseOnly,omitempty"`
 	BouyomiChanPath *string `json:"BouyomiChanPath,omitempty"`
 	CoeiroIncPath   *string `json:"CoeiroIncPath,omitempty"`
@@ -22,7 +20,6 @@ type Config struct {
 
 func initConfig(path string) (*Config, error) {
 	config := &Config{
-		NoWordPhrase:    &noWordPhrase,
 		JapaneseOnly:    &japaneseOnly,
 		BouyomiChanPath: &nullPath,
 		CoeiroIncPath:   &nullPath,
@@ -63,10 +60,6 @@ func LoadConfig() (*Config, error) {
 
 	isReset := false
 
-	if config.NoWordPhrase == nil {
-		config.NoWordPhrase = &noWordPhrase
-		isReset = true
-	}
 	if config.JapaneseOnly == nil {
 		config.JapaneseOnly = &japaneseOnly
 		isReset = true

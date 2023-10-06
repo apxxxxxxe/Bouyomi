@@ -16,7 +16,6 @@ type Dialog struct {
 }
 
 var tagRep = regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&\-+](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`)
-var noWordRep = regexp.MustCompile(`^[…‥.]+$`)
 var delimRep = regexp.MustCompile(`[！!?？。]`)
 var chScopeRep = regexp.MustCompile(`(\\([0h1u])|\\p\[([0-9]+)\])`)
 
@@ -30,7 +29,7 @@ func SplitDialog(src string, config *data.Config) []Dialog {
 
 	for i := range res {
 		// 各テキストを処理
-		res[i].Text = processNoWordSentence(clearTags(res[i].Text), config)
+		res[i].Text = clearTags(res[i].Text)
 	}
 
 	return res
@@ -80,33 +79,6 @@ func splitDialog(text string) []Dialog {
 // さくらスクリプトを削除する
 func clearTags(src string) string {
 	return tagRep.ReplaceAllString(src, "")
-}
-
-// ……。など読み上げのない文を代替文に置き換える
-func processNoWordSentence(src string, config *data.Config) string {
-	var result string
-
-	punctuations := []string{}
-	for _, p := range delimRep.FindAllStringSubmatch(src, -1) {
-		punctuations = append(punctuations, p[0])
-	}
-
-	ary := delimRep.Split(src, -1)
-	for i, s := range ary {
-		if s == "" {
-			continue
-		}
-
-		if noWordRep.MatchString(s) {
-			s = *config.NoWordPhrase
-		}
-
-		result += s
-		if i < len(punctuations) {
-			result += punctuations[i]
-		}
-	}
-	return result
 }
 
 // クイックセクションを削除する
