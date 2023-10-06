@@ -18,29 +18,20 @@ const defaultBouyomiPath = "null"
 
 func main() {
 	var (
-		bouyomiChanPath string
-		showList        bool
-		voice64         int
-		ghostName       string
-		getHash         string
-		getCharaCount   string
+		execEngines   bool
+		showList      bool
+		voice64       int
+		ghostName     string
+		getHash       string
+		getCharaCount string
 	)
-	flag.StringVar(&bouyomiChanPath, "b", defaultBouyomiPath, "path to BouyomiChan.exe")
+	flag.BoolVar(&execEngines, "e", false, "execute tools")
 	flag.BoolVar(&showList, "l", false, "show available voices")
 	flag.IntVar(&voice64, "v", 0, "voice number")
 	flag.StringVar(&ghostName, "g", "", "ghost name")
 	flag.StringVar(&getHash, "hash", "", "get hash")
 	flag.StringVar(&getCharaCount, "count", "", "get character names")
 	flag.Parse()
-
-	if bouyomiChanPath != defaultBouyomiPath {
-		if _, info := os.Stat(bouyomiChanPath); !os.IsNotExist(info) && !data.IsProcExist("BouyomiChan.exe") {
-			if err := data.ExecCommand(bouyomiChanPath); err != nil {
-				panic(err)
-			}
-		}
-		os.Exit(0)
-	}
 
 	exePath, err := os.Executable()
 	if err != nil {
@@ -57,6 +48,20 @@ func main() {
 	config, err := data.LoadConfig()
 	if err != nil {
 		log.Fatalf("error: %v\n", err)
+	}
+
+	if execEngines {
+		for _, path := range []*string{config.BouyomiChanPath, config.CoeiroIncPath, config.VoiceVoxPath} {
+			if path == nil || *path == "" {
+				continue
+			}
+			if _, info := os.Stat(*path); info != os.ErrNotExist && !data.IsProcExist(filepath.Base(*path)) {
+				if err := data.ExecCommand(*path); err != nil {
+					log.Fatalf("error: %v\n", err)
+				}
+			}
+		}
+		os.Exit(0)
 	}
 
 	voices, err := data.ListVoices(*config.JapaneseOnly)

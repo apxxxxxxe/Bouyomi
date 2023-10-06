@@ -9,17 +9,24 @@ import (
 var (
 	noWordPhrase = "んん"
 	japaneseOnly = true
+	nullPath     = ""
 )
 
 type Config struct {
-	NoWordPhrase *string `json:"NoWordPhrase,omitempty"`
-	JapaneseOnly *bool   `json:"JapaneseOnly,omitempty"`
+	NoWordPhrase    *string `json:"NoWordPhrase,omitempty"`
+	JapaneseOnly    *bool   `json:"JapaneseOnly,omitempty"`
+	BouyomiChanPath *string `json:"BouyomiChanPath,omitempty"`
+	CoeiroIncPath   *string `json:"CoeiroIncPath,omitempty"`
+	VoiceVoxPath    *string `json:"VoiceVoxPath,omitempty"`
 }
 
 func initConfig(path string) (*Config, error) {
 	config := &Config{
-		NoWordPhrase: &noWordPhrase,
-		JapaneseOnly: &japaneseOnly,
+		NoWordPhrase:    &noWordPhrase,
+		JapaneseOnly:    &japaneseOnly,
+		BouyomiChanPath: &nullPath,
+		CoeiroIncPath:   &nullPath,
+		VoiceVoxPath:    &nullPath,
 	}
 
 	bJson, err := json.MarshalIndent(config, "", "	")
@@ -60,9 +67,20 @@ func LoadConfig() (*Config, error) {
 		config.NoWordPhrase = &noWordPhrase
 		isReset = true
 	}
-
 	if config.JapaneseOnly == nil {
 		config.JapaneseOnly = &japaneseOnly
+		isReset = true
+	}
+	if config.BouyomiChanPath == nil {
+		config.BouyomiChanPath = &nullPath
+		isReset = true
+	}
+	if config.CoeiroIncPath == nil {
+		config.CoeiroIncPath = &nullPath
+		isReset = true
+	}
+	if config.VoiceVoxPath == nil {
+		config.VoiceVoxPath = &nullPath
 		isReset = true
 	}
 

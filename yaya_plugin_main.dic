@@ -23,24 +23,8 @@ OnSystemLoad
 
   FUNCTIONEX('proxy_ex.dll', '/charset', 'UTF-8')
 
-  // 棒読みちゃんの実行ファイルのパスが指定されていたらそれを実行
-  _exec_path_file = 'BouyomiChan_path.txt'
-  _exec_path = ''
-  _is_loaded = FOPEN(_exec_path_file, 'r')
-  if _is_loaded != 0 {
-    _exec_path = FREAD(_exec_path_file)
-    FCLOSE(_exec_path_file)
-  }
-  else {
-    // ファイルがなかったら作成
-    FOPEN(_exec_path_file, 'w')
-    FWRITE(_exec_path_file, 'C:\Program Files\BouyomiChan\BouyomiChan.exe')
-    FWRITE(_exec_path_file, '棒読みちゃんの実行ファイル(BouyomiChan.exe)があるパスを1行目に書いてください(上記は例です)。')
-    FCLOSE(_exec_path_file)
-  }
-  if _exec_path != '' && FSIZE(_exec_path) != -1 {
-    void EXECUTE(GETSETTING('coreinfo.path')+'core.exe', "-b %(_exec_path)")
-  }
+  // 棒読みちゃんほか音声合成エンジンの実行ファイルパスが指定されていたらそれを実行
+  void EXECUTE(GETSETTING('coreinfo.path')+'core.exe', '-e')
 
   updateOnLoad = 0
 }
