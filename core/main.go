@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/apxxxxxxe/Bouyomi/data"
 	"github.com/apxxxxxxe/Bouyomi/speak"
@@ -50,17 +51,23 @@ func main() {
 		log.Fatalf("error: %v\n", err)
 	}
 
-	if execEngines {
-		for _, path := range []*string{config.BouyomiChanPath, config.CoeiroIncPath, config.VoiceVoxPath} {
-			if path == nil || *path == "" {
+	var wg sync.WaitGroup
+	if execEngines && config.EnginesPath != nil {
+		for _, path := range config.EnginesPath {
+			if path == "" {
 				continue
 			}
-			if _, info := os.Stat(*path); info != os.ErrNotExist && !data.IsProcExist(filepath.Base(*path)) {
-				if err := data.ExecCommand(*path); err != nil {
-					log.Fatalf("error: %v\n", err)
-				}
+			if _, info := os.Stat(path); info != os.ErrNotExist && !data.IsProcExist(filepath.Base(path)) {
+				wg.Add(1)
+				go func(p string) {
+					defer wg.Done()
+					if err := data.ExecCommand(p); err != nil {
+						log.Fatalf("error: %v\n", err)
+					}
+				}(path)
 			}
 		}
+		wg.Wait()
 		os.Exit(0)
 	}
 
@@ -117,7 +124,7 @@ func main() {
 
 	var rawMsg []byte
 	rawMsg = []byte(flag.Arg(0))
-
+	rawMsg = []byte(flag.Arg(0))
 	voiceMap, err := data.LoadVoiceMap()
 	if err != nil {
 		log.Fatalf("error: %v\n", err)
