@@ -15,7 +15,7 @@ type Dialog struct {
 	Text  string
 }
 
-var tagRep = regexp.MustCompile(`\\_{0,2}[a-zA-Z0-9*!&\-+](\d|\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?`)
+var tagRep = regexp.MustCompile(`\\_{0,2}(w[1-9]|[a-zA-Z0-9*!&\-+](\[("([^"]|\\")+?"|([^\]]|\\\])+?)+?\])?)`)
 var delimRep = regexp.MustCompile(`[！!?？。]`)
 var chScopeRep = regexp.MustCompile(`(\\([0h1u])|\\p\[([0-9]+)\])`)
 
