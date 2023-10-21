@@ -42,6 +42,9 @@ shigobu氏による[SAPI For VOICEVOX](https://github.com/shigobu/SAPIForVOICEVO
 ## 設定ファイル```config.json```について
 [こちら](https://github.com/apxxxxxxe/Bouyomi/wiki/config.json%E3%81%AB%E3%82%88%E3%82%8B%E8%A8%AD%E5%AE%9A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)をご覧ください。
 
+## 更新履歴
+[こちら](https://github.com/apxxxxxxe/Bouyomi/releases)から各バージョンの変更内容をご確認ください。
+
 ## 注意
 インストール直後はバージョンが古い場合があるため、必ずネットワーク更新を行ってください。  
 本プラグインの右クリックメニューからネットワーク更新が可能です。
