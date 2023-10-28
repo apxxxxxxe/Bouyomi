@@ -132,10 +132,11 @@ func main() {
 
 	// 各セリフを読み上げさせる
 	for _, dialog := range speak.SplitDialog(string(rawMsg), config) {
-		if dialog.Scope == 0 && *config.NoVoiceByDefault {
+		voiceCode := data.FindVoice(voiceMap, ghostName, dialog.Scope)
+		if voiceCode == 0 && *config.NoVoiceByDefault {
 			continue
 		}
-		if err := speak.Speak(dialog.Text, data.FindVoice(voiceMap, ghostName, dialog.Scope)); err != nil {
+		if err := speak.Speak(dialog.Text, voiceCode); err != nil {
 			log.Fatalf("error: %v\n", err)
 		}
 	}
