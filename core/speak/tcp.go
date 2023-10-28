@@ -66,4 +66,3 @@ func dec2hex(d int16) ([]byte, error) {
 	}
 	return buf.Bytes(), nil
 }
-

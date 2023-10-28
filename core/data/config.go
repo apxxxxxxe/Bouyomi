@@ -7,19 +7,22 @@ import (
 )
 
 var (
-	japaneseOnly = true
-	nilPath      = []string{""}
+	noVoiceByDefault = false
+	japaneseOnly     = true
+	nilPath          = []string{""}
 )
 
 type Config struct {
-	JapaneseOnly *bool    `json:"JapaneseOnly,omitempty"`
-	EnginesPath  []string `json:"BouyomiChanPath,omitempty"`
+	NoVoiceByDefault *bool    `json:"NoVoiceByDefault,omitempty"`
+	JapaneseOnly     *bool    `json:"JapaneseOnly,omitempty"`
+	EnginesPath      []string `json:"BouyomiChanPath,omitempty"`
 }
 
 func initConfig(path string) (*Config, error) {
 	config := &Config{
-		JapaneseOnly: &japaneseOnly,
-		EnginesPath:  nil,
+		NoVoiceByDefault: &noVoiceByDefault,
+		JapaneseOnly:     &japaneseOnly,
+		EnginesPath:      nil,
 	}
 
 	bJson, err := json.MarshalIndent(config, "", "	")
@@ -56,6 +59,10 @@ func LoadConfig() (*Config, error) {
 
 	isReset := false
 
+	if config.NoVoiceByDefault == nil {
+		config.NoVoiceByDefault = &noVoiceByDefault
+		isReset = true
+	}
 	if config.JapaneseOnly == nil {
 		config.JapaneseOnly = &japaneseOnly
 		isReset = true

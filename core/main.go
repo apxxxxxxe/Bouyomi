@@ -71,7 +71,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	voices, err := data.ListVoices(*config.JapaneseOnly)
+	voices, err := data.ListVoices(*config.NoVoiceByDefault, *config.JapaneseOnly)
 	if err != nil {
 		log.Fatalf("error: %v\n", err)
 	}
@@ -132,6 +132,9 @@ func main() {
 
 	// 各セリフを読み上げさせる
 	for _, dialog := range speak.SplitDialog(string(rawMsg), config) {
+		if dialog.Scope == 0 && *config.NoVoiceByDefault {
+			continue
+		}
 		if err := speak.Speak(dialog.Text, data.FindVoice(voiceMap, ghostName, dialog.Scope)); err != nil {
 			log.Fatalf("error: %v\n", err)
 		}

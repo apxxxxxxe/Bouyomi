@@ -24,7 +24,7 @@ const varPath = "yaya_variable.cfg"
 
 var rep = regexp.MustCompile(`^[a-z0-9]+\.voice`)
 
-func ListVoices(japaneseOnly bool) ([]Voice, error) {
+func ListVoices(noVoiceByDefault bool, japaneseOnly bool) ([]Voice, error) {
 	const tokenPath = `SOFTWARE\WOW6432Node\Microsoft\SPEECH\Voices\Tokens`
 
 	k, err := registry.OpenKey(registry.LOCAL_MACHINE, tokenPath, registry.READ)
@@ -38,8 +38,13 @@ func ListVoices(japaneseOnly bool) ([]Voice, error) {
 		return nil, err
 	}
 
+	defaultVoice := Voice{0, "棒読みちゃん上で指定(デフォルト)", "0"}
+	if noVoiceByDefault {
+		defaultVoice = Voice{0, "読み上げなし", "0"}
+	}
+
 	voices := []Voice{
-		{0, "棒読みちゃん上で指定(デフォルト)", "0"},
+		defaultVoice,
 		{1, "女性1", "411"},
 		{2, "女性2", "411"},
 		{3, "男性1", "411"},
