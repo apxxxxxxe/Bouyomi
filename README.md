@@ -1,6 +1,6 @@
 ## 後継プラグインの紹介
 **現在、後継となるプラグイン「[GhostSpeaker](https://github.com/apxxxxxxe/GhostSpeaker)」を公開しています。（[紹介記事](https://gist.github.com/apxxxxxxe/e7eb511d55561e7f616ef37b7f172c18)）**  
-より洗練された実装となっており、機能面でも上位互換です。  
+より外部依存の少ない実装となっており、機能面でも上位互換です。  
 特に理由がない限り、新規の導入にはこちらをお勧めします。
 
 -----
